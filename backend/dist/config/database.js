@@ -15,8 +15,10 @@ const connectDB = async () => {
             throw new Error("Database URL not found in environment variables");
         }
         await mongoose_1.default.connect(dbUrl, {
-            serverSelectionTimeoutMS: 5000,
+            serverSelectionTimeoutMS: 10000,
             socketTimeoutMS: 45000,
+            maxPoolSize: 10,
+            bufferCommands: true,
         });
         console.log("Connected to database successfully");
     }

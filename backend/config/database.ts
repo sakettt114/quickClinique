@@ -15,8 +15,10 @@ const connectDB = async (): Promise<void> => {
 
     // Connect with options for serverless environments
     await mongoose.connect(dbUrl, {
-      serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
+      serverSelectionTimeoutMS: 10000, // Timeout after 10s (cold starts can be slow)
       socketTimeoutMS: 45000, // Close sockets after 45s of inactivity
+      maxPoolSize: 10, // Limit connections for serverless
+      bufferCommands: true, // Buffer commands until connection is ready
     });
     console.log("Connected to database successfully");
   } catch (err) {

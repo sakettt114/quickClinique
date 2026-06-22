@@ -19,9 +19,21 @@ app.use(bodyParser.json({ limit: '10mb' }));
 // CORS setup
 app.use(
   cors({
-    origin: process.env.NODE_ENV === 'production' 
-      ? ['https://your-domain.vercel.app', 'https://quickclinic.vercel.app'] 
-      : '*',
+    origin: function (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) {
+      // Allow requests with no origin (mobile apps, curl, Postman)
+      if (!origin) return callback(null, true);
+      
+      if (process.env.NODE_ENV === 'production') {
+        // Allow any Vercel deployment URL
+        if (origin.endsWith('.vercel.app') || origin === 'https://quickclinic.vercel.app') {
+          return callback(null, true);
+        }
+        return callback(new Error('Not allowed by CORS'));
+      }
+      
+      // In development, allow all origins
+      return callback(null, true);
+    },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     credentials: true,
   })

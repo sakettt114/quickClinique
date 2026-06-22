@@ -16,9 +16,17 @@ app.use(express_1.default.json({ limit: '10mb' }));
 app.use(body_parser_1.default.urlencoded({ extended: true, limit: '10mb' }));
 app.use(body_parser_1.default.json({ limit: '10mb' }));
 app.use((0, cors_1.default)({
-    origin: process.env.NODE_ENV === 'production'
-        ? ['https://your-domain.vercel.app', 'https://quickclinic.vercel.app']
-        : '*',
+    origin: function (origin, callback) {
+        if (!origin)
+            return callback(null, true);
+        if (process.env.NODE_ENV === 'production') {
+            if (origin.endsWith('.vercel.app') || origin === 'https://quickclinic.vercel.app') {
+                return callback(null, true);
+            }
+            return callback(new Error('Not allowed by CORS'));
+        }
+        return callback(null, true);
+    },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     credentials: true,
 }));
