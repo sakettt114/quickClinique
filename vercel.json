@@ -4,6 +4,11 @@
   "buildCommand": "npm run vercel-build",
   "outputDirectory": "frontend/build",
   "installCommand": "npm install --legacy-peer-deps",
+  "functions": {
+    "api/**/*.ts": {
+      "runtime": "@vercel/node@3"
+    }
+  },
   "rewrites": [
     {
       "source": "/api/(.*)",
