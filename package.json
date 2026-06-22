@@ -1,5 +1,5 @@
 {
-  "name": "ecommerce",
+  "name": "quickclinic",
   "version": "1.0.0",
   "main": "backend/dist/server.js",
   "scripts": {
