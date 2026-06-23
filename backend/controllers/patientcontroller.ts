@@ -22,7 +22,16 @@ export const newappointment = catchAsyncErrors(async (req: Request, res: Respons
   const appointmentNumber = uuidv4();
 
   // Find the patient and doctor
-  const patient = await Patient.findOne({ user: id });
+  let patient = await Patient.findOne({ user: id });
+  
+  // Auto-create patient profile if it doesn't exist but the user is valid
+  if (!patient) {
+    const userExists = await User.findById(id);
+    if (userExists) {
+      patient = await Patient.create({ user: id });
+    }
+  }
+
   const doctor = await Doctor.findById(doc_id);
 
   // Find the doctor's schedule
