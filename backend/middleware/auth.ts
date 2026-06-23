@@ -3,9 +3,9 @@ import jwt from 'jsonwebtoken';
 import User, { IUser } from '../models/usermodel';
 import ErrorHander from '../utils/errorhander';
 
-export interface AuthRequest extends Request {
+export type AuthRequest = Request & {
   user?: IUser;
-}
+};
 
 export const isauthenticateuser = async (req: AuthRequest, res: Response, next: NextFunction) => {
   const { token } = req.cookies;
